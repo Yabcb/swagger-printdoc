@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>Yabcb</groupId>
+    <artifactId>swagger-printdoc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+        <!-- 可以继承 -->
+        <dependencies>
+            <!-- swaggerui 依赖 -->
+            <!--springfox的核心jar包-->
+            <dependency>
+                <groupId>com.mangofactory</groupId>
+                <artifactId>swagger-springmvc</artifactId>
+                <version>0.9.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+            <!--springfox-ui的jar包(里面包含了swagger的界面静态文件)-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+        </dependencies>
+
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>io.github.swagger2markup</groupId>
+                    <artifactId>swagger2markup-maven-plugin</artifactId>
+                    <version>1.3.1</version>
+                    <configuration>
+                        <!-- api-docs访问url -->
+                        <swaggerInput>http://localhost:8080/v2/api-docs</swaggerInput>
+                        <!-- 生成为单个文档，输出路径
+                        <outputFile>src/main/doc/api</outputFile>-->
+                        <!-- 生成为多个文档，输出路径 -->
+                        <outputDir>src/main/doc/apiall</outputDir>
+                        <config>
+                            <!-- wiki格式文档 -->
+                            <!--<swagger2markup.markupLanguage>CONFLUENCE_MARKUP</swagger2markup.markupLanguage> -->
+                            <!-- ascii格式文档 -->
+                            <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+                            <!-- markdown格式文档 -->
+                            <!--<swagger2markup.markupLanguage>MARKDOWN</swagger2markup.markupLanguage>-->
+                            <swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
+                        </config>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>1.5.6</version>
+                    <configuration>
+                        <sourceDirectory>src/main/doc/apiall</sourceDirectory>
+                        <outputDirectory>src/main/doc/api/html</outputDirectory>
+                        <backend>html</backend>
+                        <sourceHighlighter>coderay</sourceHighlighter>
+                        <attributes>
+                            <toc>left</toc>
+                        </attributes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+            </plugins>
+        </build>
+</project>
